@@ -1,0 +1,44 @@
+#include <SPI.h>
+#include <Wire.h>
+#include <Servo.h>
+
+#define trigpin 5//set trigpin
+#define echopin 6//set echopin
+Servo myservo;// declare servo name type servo
+
+int duration, distance;//declare variable for unltrasonic sensor
+bool lesscoffee = false; 
+void setup() {
+  Serial.begin(9600);
+  pinMode(trigpin, OUTPUT);
+ 
+  pinMode(echopin, INPUT);
+  myservo.attach(2);// attach your servo
+  myservo.writeMicroseconds(1500);
+
+  // put your setup code here, to run once:
+}
+
+void loop() {
+//ultrasonic code 
+ digitalWrite(trigpin,HIGH);
+  _delay_ms(500);
+  digitalWrite(trigpin, LOW);
+  
+  duration=pulseIn(echopin,HIGH); 
+  distance=(duration/2)/29.1; 
+
+if(distance >= 15)// if ultrasonic sensor detects an obstacle less than 20cm in 90 degree angle.
+  {
+     int servomove = map(100,-90,90,0,170);
+     myservo.write(servomove); //servo rotates at full speed to the right
+     delay(6);
+  }
+ 
+
+
+  Serial.print("cm"); //print distance unit cm
+  Serial.println(distance);//distance
+ 
+}
+
